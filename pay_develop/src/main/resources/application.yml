@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    name: root
+    password: lyb123
+    url: jdbc:mysql://localhost:3306/pay_develop?characterEncoding=utf8&useSSL=false
+    #    使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    tomcat:
+      max-active: 20
+      initial-size: 3
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+    dbcp2:
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+mybatis:
+  mapper-locations: classpath:com/pay/pojo/entity/dtm/mapping/*.xml
+  type-aliases-package: com.pay.pojo.dtm
+pagehelper:
+  dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
