@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    name: root
+    username: root
     password: lyb123
     url: jdbc:mysql://localhost:3306/pay_develop?characterEncoding=utf8&useSSL=false
     #    使用druid数据源
@@ -23,10 +23,10 @@ spring:
       pool-prepared-statements: true
       max-open-prepared-statements: 20
 mybatis:
-  mapper-locations: classpath:com/pay/pojo/entity/dtm/mapping/*.xml
+  mapper-locations: classpath:pojo/dtm/mapping/*.xml
   type-aliases-package: com.pay.pojo.dtm
 pagehelper:
-  dialect: mysql
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+  helper-dialect: mysql
