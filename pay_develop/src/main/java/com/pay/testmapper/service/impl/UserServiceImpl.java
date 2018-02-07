@@ -1,6 +1,8 @@
 package com.pay.testmapper.service.impl;
 
-import com.pay.database.mybatis.dao.UserMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pay.database.mybatis.mapper.UserMapper;
 import com.pay.pojo.entity.dtm.User;
 import com.pay.testmapper.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAllUser(int pageNum, int pageSize) {
-        return null;
+        PageHelper.startPage(pageNum,pageSize);
+        return userMapper.selectAll();
     }
 }

@@ -1,14 +1,17 @@
 package com.pay;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.spring.annotation.MapperScan;
 
+/**
+ * @author LiYabin
+ */
 @SpringBootApplication
 @RestController
-@MapperScan("com.pay.database.mybatis.dao")
+@MapperScan(basePackages = "com.pay.database.mybatis.mapper")
 public class PayApplication {
     public static void main(String[] args) {
         SpringApplication.run(PayApplication.class,args);

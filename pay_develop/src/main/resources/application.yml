@@ -30,3 +30,6 @@ pagehelper:
   support-methods-arguments: true
   params: count=countSql
   helper-dialect: mysql
+mapper:
+  mappers: com.pay.database.mybatis.config.BaseMapper
+  identity: MYSQL
