@@ -26,12 +26,12 @@
 |delete | T... | boolean | <font color='FA8072'>N</font> | 传入一个不定参数的实例数组，将其全部删除
 |deleteAll | List\<T\> | boolean | <font color='FA8072'>N</font> | 传入一个不定参数的实例列表，将其全部删除
 |update | T | boolean | <font color='00FF7F'>Y</font> | 按照`主键`查找对象，并将其修改
-|getById | Object | boolean | <font color='00FF7F'>Y</font> | 根据`主键`查询对象实例
-|findAll | Map | boolean | <font color='FA8072'>N</font> | 根据封装好的映射进行查询
-|findAll | T | boolean | <font color='00FF7F'>Y</font> | 将对象的条件赋予在实例对象中，并进行查询
-|findAllByCondition | Object:condition, <br>int:pageNum, <br>int:pageSize | boolean | <font color='00FF7F'>Y</font> | 将条件放置进condition的条件集合中，并将其封装进分页对象当中
-|getPageInfo | T, <br>int:pageNum, <br>int:pageSize | boolean | <font color='00FF7F'>Y</font> | 将条件放置进dtm的实例对象中，进行分页查询
-|getPageInfoByCondition | Object:condition, <br>int:pageNum, <br>int:pageSize | boolean | <font color='00FF7F'>Y</font> | 将条件放置进condition的条件集合中，进行分页查询
+|getById | Object | T | <font color='00FF7F'>Y</font> | 根据`主键`查询对象实例
+|findAll | Map | List\<T\> | <font color='FA8072'>N</font> | 根据封装好的映射进行查询
+|findAll | T | List\<T\> | <font color='00FF7F'>Y</font> | 将对象的条件赋予在实例对象中，并进行查询
+|findAllByCondition | Object:condition, <br>int:pageNum, <br>int:pageSize | List\<T\> | <font color='00FF7F'>Y</font> | 将条件放置进condition的条件集合中，并将其封装进分页对象当中
+|getPageInfo | T, <br>int:pageNum, <br>int:pageSize | PageInfo\<T\> | <font color='00FF7F'>Y</font> | 将条件放置进dtm的实例对象中，进行分页查询
+|getPageInfoByCondition | Object:condition, <br>int:pageNum, <br>int:pageSize | PageInfo\<T\> | <font color='00FF7F'>Y</font> | 将条件放置进condition的条件集合中，进行分页查询
 
 
 
