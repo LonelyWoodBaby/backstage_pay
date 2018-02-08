@@ -1,17 +1,14 @@
 package com.pay.mybatis;
 
-import com.github.pagehelper.PageHelper;
-import com.pay.database.mybatis.mapper.UserMapper;
 import com.pay.pojo.entity.dtm.User;
 import com.pay.testmapper.service.UserService;
-import com.pay.testmapper.service.impl.UserServiceImpl;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import tk.mybatis.mapper.entity.Condition;
 
 import java.util.List;
 
@@ -26,6 +23,9 @@ public class UserMapperTest {
     private UserService userService;
 
 
+    /**
+     * 测试添加用户的方法，用于测试通用数据库接口是否好用
+     */
     @Ignore
     public void testInsert(){
         User user = new User();
@@ -36,12 +36,18 @@ public class UserMapperTest {
         userService.insertNewEntity(user);
     }
 
+    /**
+     * 测试列表查询及分页查询的方法
+     */
     @Test
     public void getPagePersonList(){
         List<User> userList = userService.findAllUser(2,4);
         System.out.println("当前页列表大小"+userList.size());
     }
 
+    /**
+     * 测试根据条件获取实例的方法
+     */
     @Test
     public void getUserByUserId(){
         int userId = 9;
@@ -49,4 +55,12 @@ public class UserMapperTest {
         System.out.println(user.getUserName());
     }
 
+    @Test
+    public void getUserByCondition(){
+        Condition condition = new Condition(User.class);
+        condition.createCriteria().andCondition("user_name like '%1%' ");
+        condition.setOrderByClause("user_id desc");
+        List<User> userList = userService.findAllByCondition(condition);
+        System.out.println(userList.size());
+    }
 }

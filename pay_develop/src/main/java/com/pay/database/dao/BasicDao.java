@@ -57,6 +57,11 @@ public interface BasicDao<T> {
     List<T> findAll(Map selectMap);
     List<T> findAll(T t);
 
+    List<T> findAllByCondition(Object condition);
+            //SelectByConditionMapper
+
     int countAll(T t);
     PageInfo<T> getPageInfo(T t,int pageNum,int pageSize);
+    PageInfo<T> getPageInfoByCondition(Object condition,int pageNum,int pageSize);
+
 }

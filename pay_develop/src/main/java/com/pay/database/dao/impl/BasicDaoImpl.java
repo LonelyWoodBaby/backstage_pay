@@ -66,6 +66,11 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
     }
 
     @Override
+    public List<T> findAllByCondition(Object condition) {
+        return baseMapper.selectByExample(condition);
+    }
+
+    @Override
     public List<T> findAll(Object o) {
         return baseMapper.select((T)o);
     }
@@ -81,6 +86,15 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
         pageInfo.setCount(baseMapper.selectCount((T)o));
         PageHelper.startPage(pageNum,pageSize);
         pageInfo.setResultList(baseMapper.select((T)o));
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<T> getPageInfoByCondition(Object condition, int pageNum, int pageSize) {
+        PageInfo<T> pageInfo = new PageInfo<>();
+        pageInfo.setCount(baseMapper.selectCountByExample(condition));
+        PageHelper.startPage(pageNum,pageSize);
+        pageInfo.setResultList(baseMapper.selectByExample(condition));
         return pageInfo;
     }
 }
