@@ -4,6 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.pay.database.dao.BasicDao;
 import com.pay.database.dao.entity.PageInfo;
 import com.pay.database.mybatis.config.BaseMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +13,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Liyabin
+ */
 @Service
 public class BasicDaoImpl<T> implements BasicDao<T> {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     protected BaseMapper<T> baseMapper;
 
@@ -83,18 +90,28 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
     @Override
     public PageInfo<T> getPageInfo(Object o, int pageNum, int pageSize) {
         PageInfo<T> pageInfo = new PageInfo<>();
-        pageInfo.setCount(baseMapper.selectCount((T)o));
-        PageHelper.startPage(pageNum,pageSize);
-        pageInfo.setResultList(baseMapper.select((T)o));
+        try {
+            pageInfo.setCount(baseMapper.selectCount((T)o));
+            PageHelper.startPage(pageNum,pageSize);
+            pageInfo.setResultList(baseMapper.select((T)o));
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.toString());
+        }
         return pageInfo;
     }
 
     @Override
     public PageInfo<T> getPageInfoByCondition(Object condition, int pageNum, int pageSize) {
         PageInfo<T> pageInfo = new PageInfo<>();
-        pageInfo.setCount(baseMapper.selectCountByExample(condition));
-        PageHelper.startPage(pageNum,pageSize);
-        pageInfo.setResultList(baseMapper.selectByExample(condition));
+        try {
+            pageInfo.setCount(baseMapper.selectCountByExample(condition));
+            PageHelper.startPage(pageNum,pageSize);
+            pageInfo.setResultList(baseMapper.selectByExample(condition));
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.toString());
+        }
         return pageInfo;
     }
 }

@@ -5,6 +5,8 @@ import com.pay.testmapper.service.UserService;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,6 +21,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserMapperTest {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private UserService userService;
 
@@ -61,6 +64,7 @@ public class UserMapperTest {
         condition.createCriteria().andCondition("user_name like '%1%' ");
         condition.setOrderByClause("user_id desc");
         List<User> userList = userService.findAllByCondition(condition);
+        logger.info(condition.toString());
         System.out.println(userList.size());
     }
 }

@@ -25,6 +25,8 @@ spring:
 mybatis:
   mapper-locations: classpath:pojo/dtm/mapping/*.xml
   type-aliases-package: com.pay.pojo.dtm
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 pagehelper:
   reasonable: true
   support-methods-arguments: true
