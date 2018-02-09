@@ -3,6 +3,8 @@
 /target/
 /.idea/
 pay_develop/target/
+pay_develop/log/
+
 ### Java template
 # Compiled class file
 *.class
@@ -29,3 +31,4 @@ hs_err_pid*
 ### Example user template template
 ### Example user template
 
+/pay.iml
