@@ -33,5 +33,5 @@ pagehelper:
   params: count=countSql
   helper-dialect: mysql
 mapper:
-  mappers: com.pay.database.mybatis.config.BaseMapper
+  mappers: com.pay.database.mybatis.config.BaseMapper,com.pay.database.mybatis.config.InsertUidListMapper
   identity: MYSQL

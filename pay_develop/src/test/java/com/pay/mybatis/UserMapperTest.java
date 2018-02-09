@@ -29,7 +29,7 @@ public class UserMapperTest {
     /**
      * 测试添加用户的方法，用于测试通用数据库接口是否好用
      */
-    @Ignore
+    @Test
     public void testInsert(){
         User user = new User();
         user.setPassword("1234");
@@ -65,6 +65,19 @@ public class UserMapperTest {
         condition.setOrderByClause("user_id desc");
         List<User> userList = userService.findAllByCondition(condition);
         logger.info(condition.toString());
-        System.out.println(userList.size());
+        System.out.println(userList.stream().filter(user -> user.getUserName().equals("admin1")).count());
     }
+
+    @Test
+    public void testInsertMoreUser(){
+        User[] users = new User[5];
+        for(int i=0;i<5;i++){
+            users[i] = new User();
+            users[i].setUserName("new_user" + i);
+            users[i].setPhone("phone" + i);
+            users[i].setPassword("password" + i);
+        }
+        userService.insertAll(users);
+    }
+    //ProviderSqlSource.createSqlSource
 }

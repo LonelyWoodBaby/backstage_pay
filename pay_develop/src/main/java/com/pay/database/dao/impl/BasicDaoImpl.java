@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.pay.database.dao.BasicDao;
 import com.pay.database.dao.entity.PageInfo;
 import com.pay.database.mybatis.config.BaseMapper;
+import com.pay.util.LoggerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +36,23 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
     }
 
     @Override
-    public boolean insertAll(Object[] t) {
-        return insertAll(Arrays.asList(t));
+    public boolean insertAll(Object[] arrays) {
+        if(arrays == null || arrays.length == 0){
+            throw LoggerUtil.throwNewException(new IllegalArgumentException("传递的参数值为空或不存在"),logger);
+        }
+        return insertAll(Arrays.asList(arrays));
     }
 
     @Override
-    public boolean deleteByPrimaryKey(String id) {
+    public boolean deleteByPrimaryKey(Object id) {
         return baseMapper.deleteByPrimaryKey(id) == 1;
     }
 
     @Override
-    public boolean delete(Object[] t) {
+    public boolean delete(Object[] arrays) {
+        if(arrays == null || arrays.length == 0){
+            throw LoggerUtil.throwNewException(new IllegalArgumentException("传递的参数值为空或不存在"),logger,"删除对象时获取的参数值为空/n ");
+        }
         //TODO 完成批量删除的方法
         return false;
     }

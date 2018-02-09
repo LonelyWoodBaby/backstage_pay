@@ -31,8 +31,18 @@ public interface BasicDao<T> {
 
     //删除类
 
-    boolean deleteByPrimaryKey(String id);
+    /**
+     * 根据主键删除对应的数据库实体类
+     * @param id 主键
+     * @return 删除成功后返回true
+     */
+    boolean deleteByPrimaryKey(Object id);
 
+    /**
+     * 可依据实例对象进行删除，其中包含实例对象数组队列
+     * @param t 要删除的实例对象，需要注意判断参数值是否非空
+     * @return 删除成功后返回true
+     */
     boolean delete(T... t);
 
     boolean deleteAll(List<T> entityList);
