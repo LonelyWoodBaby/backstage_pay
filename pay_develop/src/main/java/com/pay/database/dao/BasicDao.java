@@ -59,12 +59,12 @@ public interface BasicDao<T> {
      */
     T getById(Object id);
 
-    /**
-     * 根据查询映射返回查询结果
-     * @param selectMap
-     * @return 符合条件的结果集
-     */
-    List<T> findAll(Map selectMap);
+//    /**
+//     * 根据查询映射返回查询结果
+//     * @param selectMap
+//     * @return 符合条件的结果集
+//     */
+////    List<T> findAll(Map selectMap);
     List<T> findAll(T t);
 
     List<T> findAllByCondition(Object condition);

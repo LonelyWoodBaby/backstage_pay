@@ -29,7 +29,7 @@ public class UserMapperTest {
     /**
      * 测试添加用户的方法，用于测试通用数据库接口是否好用
      */
-    @Test
+    @Ignore
     public void testInsert(){
         User user = new User();
         user.setPassword("1234");
@@ -42,7 +42,7 @@ public class UserMapperTest {
     /**
      * 测试列表查询及分页查询的方法
      */
-    @Test
+    @Ignore
     public void getPagePersonList(){
         List<User> userList = userService.findAllUser(2,4);
         System.out.println("当前页列表大小"+userList.size());
@@ -51,14 +51,14 @@ public class UserMapperTest {
     /**
      * 测试根据条件获取实例的方法
      */
-    @Test
+    @Ignore
     public void getUserByUserId(){
         int userId = 9;
         User user = userService.getById(userId);
         System.out.println(user.getUserName());
     }
 
-    @Test
+    @Ignore
     public void getUserByCondition(){
         Condition condition = new Condition(User.class);
         condition.createCriteria().andCondition("user_name like '%1%' ");
@@ -68,7 +68,7 @@ public class UserMapperTest {
         System.out.println(userList.stream().filter(user -> user.getUserName().equals("admin1")).count());
     }
 
-    @Test
+    @Ignore
     public void testInsertMoreUser(){
         User[] users = new User[5];
         for(int i=0;i<5;i++){
@@ -78,6 +78,16 @@ public class UserMapperTest {
             users[i].setPassword("password" + i);
         }
         userService.insertAll(users);
+    }
+
+    @Test
+    public void testFindAllFromEhCache(){
+        for(int i = 0; i<5; i++){
+            List<User> resultList =  userService.findAllUserFromCache();
+            if(resultList == null) System.out.println("没有结果");
+            System.out.println(resultList.size());
+        }
+//        resultList.stream().forEach(user -> System.out.println(user.getUserId()));
     }
     //ProviderSqlSource.createSqlSource
 }

@@ -73,11 +73,11 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
         return baseMapper.selectByPrimaryKey(id);
     }
 
-    @Override
-    public List<T> findAll(Map selectMap) {
-        //TODO 完成键值映射的查询方法
-        return null;
-    }
+//    @Override
+//    public List<T> findAll(Map selectMap) {
+//        //TODO 完成键值映射的查询方法
+//        return null;
+//    }
 
     @Override
     public List<T> findAllByCondition(Object condition) {
