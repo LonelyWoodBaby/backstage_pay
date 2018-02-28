@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 /**
  * @author Lee Yarbin
@@ -48,6 +51,11 @@ public class QuartzSchedulerUtils {
         if (!scheduler.isStarted()){
             scheduler.start();
         }
+
+        if(scheduler.getTrigger(TriggerKey.triggerKey(entity.getJobClassName(), entity.getJobGroupName())) != null){
+            rescheduleSimpleJob(entity);
+            return ;
+        }
         //构建job信息
         JobDetail jobDetail = JobBuilder.newJob(getClass(entity.getJobClassName()).getClass())
                 .withIdentity(entity.getJobClassName(), entity.getJobGroupName()).build();
@@ -61,6 +69,7 @@ public class QuartzSchedulerUtils {
             scheduler.scheduleJob(jobDetail, trigger);
             logger.info("添加定时任务：【" + jobClassName +"】");
         } catch (SchedulerException e) {
+            e.printStackTrace();
             System.out.println("创建定时任务失败"+e);
             throw new Exception("创建定时任务失败");
         }
@@ -123,6 +132,10 @@ public class QuartzSchedulerUtils {
         return (BaseJob)class1.newInstance();
     }
 
+    public SchedulerJobEntity createScheduleJob(String jobClassName, String jobGroupName, String cronExpression){
+        return this.createScheduleJob(jobClassName,jobGroupName,cronExpression,"");
+    }
+
     public SchedulerJobEntity createScheduleJob(String jobClassName, String jobGroupName, String cronExpression,String description){
         SchedulerJobEntity entity = new SchedulerJobEntity();
         entity.setCronExpression(cronExpression);
@@ -130,6 +143,10 @@ public class QuartzSchedulerUtils {
         entity.setJobGroupName(jobGroupName);
         entity.setDescription(description);
         return createScheduleJob(entity);
+    }
+
+    public SchedulerJobEntity createScheduleJob(String jobClassName, String jobGroupName, int intervalSeconds){
+        return this.createScheduleJob(jobClassName,jobGroupName,intervalSeconds,"");
     }
 
     public SchedulerJobEntity createScheduleJob(String jobClassName, String jobGroupName, int intervalSeconds,String description){
@@ -143,5 +160,10 @@ public class QuartzSchedulerUtils {
 
     private SchedulerJobEntity createScheduleJob(SchedulerJobEntity entity){
         return entity;
+    }
+
+    public static String transTime2String(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd:mm:ss:SSS");
+        return sdf.format(date);
     }
 }

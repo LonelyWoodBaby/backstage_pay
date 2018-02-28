@@ -13,6 +13,9 @@ public class HelloJob implements BaseJob {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        logger.info(jobExecutionContext.getTrigger().getKey().toString());
+        logger.info(jobExecutionContext.getJobDetail().getKey().getName());
+        logger.info(jobExecutionContext.getTrigger().getStartTime().toString());
         logger.info("hello 执行时间：" + new Date());
     }
 }
