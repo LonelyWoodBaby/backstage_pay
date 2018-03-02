@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -35,7 +36,6 @@ public class UserMapperTest {
         user.setPassword("1234");
         user.setPhone("1231");
         user.setUserName("admin1");
-
         userService.insertNewEntity(user);
     }
 
