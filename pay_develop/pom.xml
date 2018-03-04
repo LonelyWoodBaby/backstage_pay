@@ -96,7 +96,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
-            <version>1.5.10.RELEASE</version>
         </dependency>
 
         <dependency><!-- 该依赖必加，里面有sping对schedule的支持 -->
@@ -125,7 +124,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.10.RELEASE</version>
             </plugin>
             <!-- mybatis generator 自动生成代码插件 -->
             <plugin>
