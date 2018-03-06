@@ -1,5 +1,6 @@
 package com.pay.beans.rules;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.util.Assert;
 
 import java.text.DecimalFormat;
@@ -44,6 +45,20 @@ public interface FormatRule<T, R> {
     }
 
     /**
+     * 将布尔值按照规则格式化为对应的值对象
+     * @param results
+     * @return
+     */
+    static FormatRule formaBooleanRule(String[] results) {
+        Assert.notNull(results,"布尔转换的数组格式不得为空");
+        Assert.isTrue(results.length >=2,"转换依据数组的长度应不小于2");
+        return (b)->{
+            Assert.isTrue(b instanceof Boolean,"传入参数应为布尔值");
+            return Boolean.valueOf((Boolean)b)? results[0]:results[1];
+        };
+    }
+
+    /**
      * 将一个符合要求的字符串格式化转换为时间  String -> Date
      * @param datePattern 日期格式化正则
      * @return 格式化好的时间Date
@@ -64,5 +79,15 @@ public interface FormatRule<T, R> {
     static FormatRule convertToDouble(String amountPattern){
         Assert.notNull(amountPattern,"日期格式化规则不可为空");
         return (sourceValue -> new DecimalFormat(amountPattern).parse((String) sourceValue).doubleValue());
+    }
+
+    /**
+     * 将一个属性值转换为布尔值
+     * @param value 当判断的依据为value时，返回布尔值为真，否则为false
+     * @return 判断后的布尔值
+     */
+    static FormatRule convertToBoolean(String value){
+        Assert.notNull(value,"判断真值的方式不应为空");
+        return (v) -> value.equals((String)v);
     }
 }

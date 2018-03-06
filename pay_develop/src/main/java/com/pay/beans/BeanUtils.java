@@ -35,10 +35,29 @@ public class BeanUtils {
      * @param source 源对象
      * @param target 目标对象
      */
-    public static void copyBeanBase(@NotNull Object source, Object target) {
+    public static void copyBeanBaseOnly(@NotNull Object source, Object target){
         Assert.notNull(source, "转换源对象不得为null对象");
         Assert.notNull(target, "转换目标对象不得为null对象");
         org.springframework.beans.BeanUtils.copyProperties(source,target);
+    }
+
+    /**
+     * 添加字典项的转换，source和target如果存在一个集成了BaseBean，则开始按照字典转换规则转换代码
+     * @param source 源对象
+     * @param target 目标对象
+     */
+    public static void copyBeanBase(@NotNull Object source, Object target) {
+        copyBeanBaseOnly(source,target);
+        //enum -> String
+        if(BaseBean.class.isAssignableFrom(target.getClass())
+                && ((BaseBean)target).getEnumToValueDictionaryRegulations().size() > 0){
+            copyBeanWithRuleByName(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations());
+        }
+        //String -> enum
+        if(BaseBean.class.isAssignableFrom(source.getClass())
+                && ((BaseBean)source).getValueToEnumDictionaryRegulations().size() > 0){
+            copyBeanWithRuleByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(),true);
+        }
     }
 
     /**
@@ -53,6 +72,7 @@ public class BeanUtils {
             return;
         }
         if(beans.length == 1){
+            copyBeanBase(source,target);
             Predicate<Field> noneMatchFunction = (Field f)-> Arrays.stream(target.getClass().getDeclaredFields())
                     .noneMatch(tf ->tf.getName().equals(f.getName()));
             Predicate<Field> validateFunction = (Field f)-> beans[0].getClazz() == f.getType();
@@ -70,6 +90,7 @@ public class BeanUtils {
      * @param convertRegulations 自定义的转换规则列表。
      */
     public static void copyBeanWithRuleByType(Object source, Object target, List<ConvertTypeBean> convertRegulations){
+        copyBeanBase(source,target);
         Predicate<Field> noneMatchFunction = (Field f)-> Arrays.stream(target.getClass().getDeclaredFields())
                 .noneMatch(tf ->tf.getName().equals(f.getName()) && ConvertRegulations.hadClassType(convertRegulations,f.getType()));
         Predicate<Field> validateFunction = f -> true;
@@ -90,6 +111,7 @@ public class BeanUtils {
             return;
         }
         if(beans.length == 1){
+            copyBeanBase(source,target);
             Predicate<Field> noneMatchFunction = (Field f)-> Arrays.stream(target.getClass().getDeclaredFields())
                     .noneMatch(tf ->tf.getName().equals(f.getName()));
             Predicate<Field> validateFunction = (Field f)-> beans[0].getFieldName().equals(f.getName());
@@ -108,23 +130,8 @@ public class BeanUtils {
      * @param convertRegulations 要转换的规则对象，此处为列表格式
      */
     public static void copyBeanWithRuleByName(Object source, Object target, List<ConvertNameBean> convertRegulations){
-        copyBeanWithRuleByNameForEnum(source,target,convertRegulations,false);
-    }
-
-    public static void copyBeanBaseForEnum(@NotNull Object source, Object target) {
-        Assert.notNull(source, "转换源对象不得为null对象");
-        Assert.notNull(target, "转换目标对象不得为null对象");
         copyBeanBase(source,target);
-        //enum -> String
-        if(BaseBean.class.isAssignableFrom(target.getClass())
-                && ((BaseBean)target).getEnumToValueDictionaryRegulations().size() > 0){
-            copyBeanWithRuleByName(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations());
-        }
-        //String -> enum
-        if(BaseBean.class.isAssignableFrom(source.getClass())
-                && ((BaseBean)source).getValueToEnumDictionaryRegulations().size() > 0){
-            copyBeanWithRuleByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(),true);
-        }
+        copyBeanWithRuleByNameForEnum(source,target,convertRegulations,false);
     }
 
     private static void copyBeanWithRuleByNameForEnum(Object source, Object target, List<ConvertNameBean> convertRegulations,boolean isConvertEnum){
@@ -150,7 +157,7 @@ public class BeanUtils {
     }
 
     private static void copyBeanWithRuleService(Object source, Object target, Predicate<Field> noneMatchFunction, Predicate<Field> validateFunction, Function<Field,FormatRule> getRuleFunction,boolean isConvertEnum){
-        copyBeanBase(source,target);
+
         Field[] fields = source.getClass().getDeclaredFields();
         Arrays.stream(fields).forEach(
                 (Field f) -> {

@@ -1,29 +1,38 @@
 package com.pay.beans;
 
+import com.pay.beans.dictionary.DictionaryProperties;
 import com.pay.beans.entity.ConvertNameBean;
 import com.pay.beans.entity.ConvertTypeBean;
 import com.pay.beans.rules.FormatRule;
 import com.pay.beans.rules.regulations.ConvertRegulations;
 import com.pay.beans.test.UserBean;
 import com.pay.beans.test.UserDtm;
+import com.pay.beans.test.UserStatusDict;
 import com.pay.pojo.entity.dtm.User;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
+@RunWith(SpringRunner.class)
 public class TestBeanUtils {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private DictionaryProperties dictionaryProperties;
 
     @Test
     public void testConvertSource2TargetByTypeWithOneRule(){
         UserBean source = createUserBean();
-        UserDtm target = createUserDtm();
+        UserDtm target = new UserDtm();
 
         FormatRule dateRule = FormatRule.formatDateRule("yyyy年MM月dd日HH时mm分ss秒：SSS");
         ConvertTypeBean bean = new ConvertTypeBean(Double.class,dateRule);
@@ -36,7 +45,7 @@ public class TestBeanUtils {
     @Test
     public void testConvertSource2TargetByTypeWithRuleList(){
         UserBean source = createUserBean();
-        UserDtm target = createUserDtm();
+        UserDtm target = new UserDtm();
 
         List<ConvertTypeBean> beanList = ConvertRegulations.MODEL_TO_DATA_MODEL_REGULATION;
 
@@ -48,7 +57,7 @@ public class TestBeanUtils {
     @Test
     public void testConvertSource2TargetByNameWithOneRule(){
         UserDtm source = createUserDtm();
-        UserBean target = createUserBean();
+        UserBean target = new UserBean();
 
         FormatRule salaryRule = FormatRule.convertToDouble("#,###.####");
         ConvertNameBean bean = new ConvertNameBean("salary",salaryRule);
@@ -61,11 +70,29 @@ public class TestBeanUtils {
     @Test
     public void testConvertSource2TargetByNameWithRuleList(){
         UserDtm source = createUserDtm();
-        UserBean target = createUserBean();
+        UserBean target = new UserBean();
 
         List<ConvertNameBean> beanList = ConvertRegulations.VALUE_TO_MODEL_REGULATION;
         BeanUtils.copyBeanWithRuleByName(source,target,beanList);
+    }
 
+    @Test
+    public void testConvertEnumToValue(){
+        UserBean source = createUserBean();
+        UserDtm target= new UserDtm();
+        for(int i=0;i<100000;i++){
+            BeanUtils.copyBeanBaseForEnum(source,target);
+        }
+        sayUserDtm(target);
+    }
+
+    @Test
+    public void testConvertValueToEnum(){
+        UserDtm source = createUserDtm();
+        UserBean target = new UserBean();
+        for(int i=0;i<100000;i++){
+            BeanUtils.copyBeanBaseForEnum(source,target);
+        }
         sayUserBean(target);
     }
 
@@ -77,6 +104,7 @@ public class TestBeanUtils {
         userBean.setUserId(12345);
         userBean.setBirthday(new Date());
         userBean.setSalary(1233123.0);
+        userBean.setUserStatusDict(UserStatusDict.off);
         List<User> list = new ArrayList<>();
         User user = new User();
         user.setUserId(1);
@@ -102,6 +130,7 @@ public class TestBeanUtils {
         userDtm.setUserId(12345);
         userDtm.setBirthday("2013年06月12日07时28分33秒");
         userDtm.setSalary("22,312,333.9812");
+        userDtm.setUserStatusDict("200");
         List<User> list = new ArrayList<>();
         User user = new User();
         user.setUserId(1);
@@ -128,6 +157,7 @@ public class TestBeanUtils {
         System.out.println(userBean.getSalary());
         System.out.println(userBean.getUserList().size());
         System.out.println(userBean.getUserList().get(1).getUserName());
+        System.out.println(userBean.getUserStatusDict());
     }
 
     private void sayUserDtm(UserDtm userDtm){
@@ -139,5 +169,6 @@ public class TestBeanUtils {
         System.out.println(userDtm.getSalary());
         System.out.println(userDtm.getUserList().size());
         System.out.println(userDtm.getUserList().get(1).getUserName());
+        System.out.println("userStatusDict:" + userDtm.getUserStatusDict());
     }
 }

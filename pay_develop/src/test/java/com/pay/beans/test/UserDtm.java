@@ -1,10 +1,14 @@
 package com.pay.beans.test;
 
+import com.pay.beans.dictionary.BaseBean;
+import com.pay.beans.dictionary.view.UserStatusDict;
 import com.pay.pojo.entity.dtm.User;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class UserDtm {
+public class UserDtm extends BaseBean{
     private Integer userId;
 
     private String userName;
@@ -17,6 +21,15 @@ public class UserDtm {
     private String birthday;
 
     private List<User> userList;
+    private String userStatusDict;
+
+    public String getUserStatusDict() {
+        return userStatusDict;
+    }
+
+    public void setUserStatusDict(String userStatusDict) {
+        this.userStatusDict = userStatusDict;
+    }
 
     public List<User> getUserList() {
         return userList;
@@ -72,5 +85,12 @@ public class UserDtm {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public Map<String, Class> getMappingDictionaryConfig() {
+        Map<String, Class> dictionaryMap = new HashMap<>();
+        dictionaryMap.put("userStatusDict", UserStatusDict.class);
+        return dictionaryMap;
     }
 }

@@ -1,5 +1,7 @@
 package com.pay.beans.rules.regulations;
 
+import com.pay.beans.dictionary.DictionaryConfig;
+import com.pay.beans.dictionary.view.UserStatusDict;
 import com.pay.beans.entity.ConvertNameBean;
 import com.pay.beans.entity.ConvertTypeBean;
 import com.pay.beans.rules.FormatRule;
@@ -28,10 +30,18 @@ public class ConvertRegulations {
         beanList.add(new ConvertTypeBean(Date.class, FormatRule.formatDateRule("yyyy年MM月dd日HH时mm分ss秒：SSS")));
         return beanList;
     }
+
     private static List<ConvertNameBean> getValueToModelRegulation()  {
         List<ConvertNameBean> beanList = new ArrayList<>();
         beanList.add(new ConvertNameBean("salary", FormatRule.convertToDouble("#,###.###")));
         beanList.add(new ConvertNameBean("birthday", FormatRule.convertToDate("yyyy年MM月dd日HH时mm分ss秒")));
+        return beanList;
+    }
+
+    private static List<ConvertNameBean> getEnumValueRegulation()  {
+        List<ConvertNameBean> beanList = new ArrayList<>();
+        beanList.add(new ConvertNameBean("userStatusDict",
+                (e)-> DictionaryConfig.convertValueFromValueDictionary(UserStatusDict.class.getName(), (Enum) e)));
         return beanList;
     }
 

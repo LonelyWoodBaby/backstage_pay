@@ -19,6 +19,15 @@ public class UserBean {
     private Date birthday;
 
     private List<User> userList;
+    private UserStatusDict userStatusDict;
+
+    public UserStatusDict getUserStatusDict() {
+        return userStatusDict;
+    }
+
+    public void setUserStatusDict(UserStatusDict userStatusDict) {
+        this.userStatusDict = userStatusDict;
+    }
 
     public List<User> getUserList() {
         return userList;
