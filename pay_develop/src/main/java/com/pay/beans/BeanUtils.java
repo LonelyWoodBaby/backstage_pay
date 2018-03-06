@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -35,7 +36,7 @@ public class BeanUtils {
      * @param source 源对象
      * @param target 目标对象
      */
-    public static void copyBeanBaseOnly(@NotNull Object source, Object target){
+    public static void copyBeanOnly(@NotNull Object source, Object target){
         Assert.notNull(source, "转换源对象不得为null对象");
         Assert.notNull(target, "转换目标对象不得为null对象");
         org.springframework.beans.BeanUtils.copyProperties(source,target);
@@ -47,16 +48,36 @@ public class BeanUtils {
      * @param target 目标对象
      */
     public static void copyBeanBase(@NotNull Object source, Object target) {
-        copyBeanBaseOnly(source,target);
+        copyBeanOnly(source,target);
         //enum -> String
         if(BaseBean.class.isAssignableFrom(target.getClass())
                 && ((BaseBean)target).getEnumToValueDictionaryRegulations().size() > 0){
-            copyBeanWithRuleByName(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations());
+            copyBeanWithRuleByNameForEnum(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations(),false);
         }
         //String -> enum
         if(BaseBean.class.isAssignableFrom(source.getClass())
                 && ((BaseBean)source).getValueToEnumDictionaryRegulations().size() > 0){
             copyBeanWithRuleByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(),true);
+        }
+    }
+
+    /**
+     * 可以自定义转换类型的带字典转换的方法。需要传递一个字典映射值。
+     * @param source 源对象
+     * @param target 目标对象
+     * @param mappingDictionaryConfig 字典映射对象。String为映射变量名，Class为映射的字典依据枚举类，需要继承BaseDict
+     */
+    public static void copyBeanBase(@NotNull Object source, Object target,Map<String,Class> mappingDictionaryConfig) {
+        copyBeanOnly(source,target);
+        //enum -> String
+        if(BaseBean.class.isAssignableFrom(target.getClass())
+                && ((BaseBean)target).getEnumToValueDictionaryRegulations().size() > 0){
+            copyBeanWithRuleByName(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations(mappingDictionaryConfig));
+        }
+        //String -> enum
+        if(BaseBean.class.isAssignableFrom(source.getClass())
+                && ((BaseBean)source).getValueToEnumDictionaryRegulations().size() > 0){
+            copyBeanWithRuleByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(mappingDictionaryConfig),true);
         }
     }
 

@@ -26,9 +26,6 @@ import java.util.List;
 public class TestBeanUtils {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private DictionaryProperties dictionaryProperties;
-
     @Test
     public void testConvertSource2TargetByTypeWithOneRule(){
         UserBean source = createUserBean();
@@ -80,9 +77,10 @@ public class TestBeanUtils {
     public void testConvertEnumToValue(){
         UserBean source = createUserBean();
         UserDtm target= new UserDtm();
-        for(int i=0;i<100000;i++){
-            BeanUtils.copyBeanBaseForEnum(source,target);
-        }
+//        for(int i=0;i<100000;i++){
+//            BeanUtils.copyBeanBase(source,target);
+//        }
+        BeanUtils.copyBeanBase(source,target);
         sayUserDtm(target);
     }
 
@@ -91,7 +89,7 @@ public class TestBeanUtils {
         UserDtm source = createUserDtm();
         UserBean target = new UserBean();
         for(int i=0;i<100000;i++){
-            BeanUtils.copyBeanBaseForEnum(source,target);
+            BeanUtils.copyBeanBase(source,target);
         }
         sayUserBean(target);
     }
