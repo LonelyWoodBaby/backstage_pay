@@ -1,5 +1,8 @@
 package com.pay.beans;
 
+import com.pay.beans.dictionary.BaseBean;
+import com.pay.beans.dictionary.DefaultDict;
+import com.pay.beans.dictionary.DictionaryConfig;
 import com.pay.beans.entity.ConvertNameBean;
 import com.pay.beans.entity.ConvertTypeBean;
 import com.pay.beans.rules.FormatRule;
@@ -9,9 +12,11 @@ import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -103,11 +108,32 @@ public class BeanUtils {
      * @param convertRegulations 要转换的规则对象，此处为列表格式
      */
     public static void copyBeanWithRuleByName(Object source, Object target, List<ConvertNameBean> convertRegulations){
+        copyBeanWithRuleByNameForEnum(source,target,convertRegulations,false);
+    }
+
+    public static void copyBeanBaseForEnum(@NotNull Object source, Object target) {
+        Assert.notNull(source, "转换源对象不得为null对象");
+        Assert.notNull(target, "转换目标对象不得为null对象");
+        copyBeanBase(source,target);
+        //enum -> String
+        if(BaseBean.class.isAssignableFrom(target.getClass())
+                && ((BaseBean)target).getEnumToValueDictionaryRegulations().size() > 0){
+            copyBeanWithRuleByName(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations());
+        }
+        //String -> enum
+        if(BaseBean.class.isAssignableFrom(source.getClass())
+                && ((BaseBean)source).getValueToEnumDictionaryRegulations().size() > 0){
+            copyBeanWithRuleByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(),true);
+        }
+    }
+
+    private static void copyBeanWithRuleByNameForEnum(Object source, Object target, List<ConvertNameBean> convertRegulations,boolean isConvertEnum){
         Predicate<Field> noneMatchFunction = (Field f)-> Arrays.stream(target.getClass().getDeclaredFields())
-                .noneMatch(tf ->tf.getName().equals(f.getName()) && ConvertRegulations.hadFieldName(convertRegulations,tf.getName()));
+                .noneMatch(tf ->tf.getName().equals(f.getName())
+                        && ConvertRegulations.hadFieldName(convertRegulations,tf.getName()));
         Predicate<Field> validateFunction = f -> true;
         Function<Field,FormatRule> getRuleFunction = f -> ConvertRegulations.getFormatRuleByFieldName(convertRegulations,f.getName());
-        copyBeanWithRuleService(source,target,noneMatchFunction,validateFunction,getRuleFunction);
+        copyBeanWithRuleService(source,target,noneMatchFunction,validateFunction,getRuleFunction,isConvertEnum);
     }
 
     /**
@@ -120,6 +146,10 @@ public class BeanUtils {
      * @param getRuleFunction 获取具体格式化规则的函数
      */
     private static void copyBeanWithRuleService(Object source, Object target, Predicate<Field> noneMatchFunction, Predicate<Field> validateFunction, Function<Field,FormatRule> getRuleFunction){
+        copyBeanWithRuleService(source,target,noneMatchFunction,validateFunction,getRuleFunction,false);
+    }
+
+    private static void copyBeanWithRuleService(Object source, Object target, Predicate<Field> noneMatchFunction, Predicate<Field> validateFunction, Function<Field,FormatRule> getRuleFunction,boolean isConvertEnum){
         copyBeanBase(source,target);
         Field[] fields = source.getClass().getDeclaredFields();
         Arrays.stream(fields).forEach(
@@ -134,13 +164,26 @@ public class BeanUtils {
                     try {
                         Method sourceGetMethod = source.getClass().getMethod(getMethodName);
                         Method targetSetMethod = target.getClass().getMethod(setMethodName,target.getClass().getDeclaredField(fieldName).getType());
-                        if(validateFunction.test(f)){
+                        if(isConvertEnum && target.getClass().getDeclaredField(fieldName).getType().isEnum() && validateFunction.test(f)){
+                            Enum enumName = (Enum) getRuleFunction.apply(f).transFunction( sourceGetMethod.invoke(source));
+                            targetSetMethod.invoke(target, getEnumByValue(enumName.name(),target.getClass().getDeclaredField(fieldName).getType()));
+                        }else if(validateFunction.test(f)){
                             targetSetMethod.invoke(target,getRuleFunction.apply(f).transFunction( sourceGetMethod.invoke(source)));
                         }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
         );
     }
+    private static Enum getEnumByValue(String enumName,Class enumClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method valuesMethod = enumClass.getMethod("values");
+        Enum[] values = (Enum[]) valuesMethod.invoke(enumClass);
+        Optional<Enum> result = Arrays.stream(values).filter(v -> v.name().equals(enumName)).findAny();
+        Assert.isTrue(result.isPresent(),"Bean字典转换时没有找到对应的字典项。转换值"+enumName+",转换字典项:"+enumClass.getName() );
+        return result.get();
+    }
+
+
 }
