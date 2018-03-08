@@ -2,6 +2,8 @@ package com.pay.schedule;
 
 import com.pay.schedule.entity.SchedulerJobEntity;
 import com.pay.schedule.job.BaseJob;
+import com.pay.schedule.pojo.model.ScheduleWorkJob;
+import com.pay.schedule.pojo.model.dict.ScheduleWorkType;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +25,7 @@ public class QuartzSchedulerUtils {
     @Autowired
     private Scheduler scheduler;
 
-    public void addCronJob(SchedulerJobEntity entity) throws Exception {
+    public void addCronJob(ScheduleWorkJob entity) throws Exception {
         // 启动调度器
         if (!scheduler.isStarted()){
             scheduler.start();
@@ -47,7 +49,7 @@ public class QuartzSchedulerUtils {
         execute(entity.getJobClassName(),jobDetail,trigger);
     }
 
-    public void addSimpleJob(SchedulerJobEntity entity) throws Exception {
+    public void addSimpleJob(ScheduleWorkJob entity) throws Exception {
         if (!scheduler.isStarted()){
             scheduler.start();
         }
@@ -83,7 +85,7 @@ public class QuartzSchedulerUtils {
         scheduler.resumeJob(JobKey.jobKey(jobClassName, jobGroupName));
     }
 
-    public void rescheduleCronJob(SchedulerJobEntity entity) throws Exception {
+    public void rescheduleCronJob(ScheduleWorkJob entity) throws Exception {
         try {
             TriggerKey triggerKey = TriggerKey.triggerKey(entity.getJobClassName(), entity.getJobGroupName());
             // 表达式调度构建器
@@ -102,7 +104,7 @@ public class QuartzSchedulerUtils {
         }
     }
 
-    public void rescheduleSimpleJob(SchedulerJobEntity entity) throws Exception {
+    public void rescheduleSimpleJob(ScheduleWorkJob entity) throws Exception {
         try {
             TriggerKey triggerKey = TriggerKey.triggerKey(entity.getJobClassName(), entity.getJobGroupName());
             // 表达式调度构建器
@@ -132,38 +134,35 @@ public class QuartzSchedulerUtils {
         return (BaseJob)class1.newInstance();
     }
 
-    public SchedulerJobEntity createScheduleJob(String jobClassName, String jobGroupName, String cronExpression){
+    public ScheduleWorkJob createScheduleJob(String jobClassName, String jobGroupName, String cronExpression){
         return this.createScheduleJob(jobClassName,jobGroupName,cronExpression,"");
     }
 
-    public SchedulerJobEntity createScheduleJob(String jobClassName, String jobGroupName, String cronExpression,String description){
-        SchedulerJobEntity entity = new SchedulerJobEntity();
+    public ScheduleWorkJob createScheduleJob(String jobClassName, String jobGroupName, String cronExpression, String description){
+        ScheduleWorkJob entity = new ScheduleWorkJob();
         entity.setCronExpression(cronExpression);
         entity.setJobClassName(jobClassName);
         entity.setJobGroupName(jobGroupName);
         entity.setDescription(description);
+        entity.setScheduleWorkType(ScheduleWorkType.CRON_SCHEDULE);
         return createScheduleJob(entity);
     }
 
-    public SchedulerJobEntity createScheduleJob(String jobClassName, String jobGroupName, int intervalSeconds){
+    public ScheduleWorkJob createScheduleJob(String jobClassName, String jobGroupName, int intervalSeconds){
         return this.createScheduleJob(jobClassName,jobGroupName,intervalSeconds,"");
     }
 
-    public SchedulerJobEntity createScheduleJob(String jobClassName, String jobGroupName, int intervalSeconds,String description){
-        SchedulerJobEntity entity = new SchedulerJobEntity();
+    public ScheduleWorkJob createScheduleJob(String jobClassName, String jobGroupName, int intervalSeconds,String description){
+        ScheduleWorkJob entity = new ScheduleWorkJob();
         entity.setIntervalTime(intervalSeconds);
         entity.setJobClassName(jobClassName);
         entity.setJobGroupName(jobGroupName);
         entity.setDescription(description);
+        entity.setScheduleWorkType(ScheduleWorkType.SIMPLE_SCHEDULE);
         return createScheduleJob(entity);
     }
 
-    private SchedulerJobEntity createScheduleJob(SchedulerJobEntity entity){
+    private ScheduleWorkJob createScheduleJob(ScheduleWorkJob entity){
         return entity;
-    }
-
-    public static String transTime2String(Date date){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd:mm:ss:SSS");
-        return sdf.format(date);
     }
 }

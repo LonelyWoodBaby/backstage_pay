@@ -1,6 +1,4 @@
-package com.pay.beans.dictionary;
-
-import com.pay.beans.dictionary.BaseDict;
+package com.pay.beans.dictionary.base;
 
 public enum DefaultDict implements BaseDict{
     noValue(""),

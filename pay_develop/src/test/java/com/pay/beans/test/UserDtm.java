@@ -1,6 +1,6 @@
 package com.pay.beans.test;
 
-import com.pay.beans.dictionary.BaseBean;
+import com.pay.beans.dictionary.base.BaseBean;
 import com.pay.beans.dictionary.view.UserStatusDict;
 import com.pay.pojo.entity.dtm.User;
 

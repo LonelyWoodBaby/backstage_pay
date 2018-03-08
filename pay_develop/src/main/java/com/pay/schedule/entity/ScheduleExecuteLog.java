@@ -20,7 +20,7 @@ public class ScheduleExecuteLog {
     private String jobGroupName;
 
     /**
-     * 总执行时间，计时单位为微秒
+     * 总执行时间，计时单位为毫秒
      */
     private long executeTime;
     /**

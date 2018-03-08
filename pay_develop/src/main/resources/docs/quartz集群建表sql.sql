@@ -181,8 +181,6 @@ commit;
 
 # 清空表数据
 
-truncate table wp_comments
-
 truncate table QRTZ_FIRED_TRIGGERS;
 truncate table QRTZ_PAUSED_TRIGGER_GRPS;
 truncate table QRTZ_SCHEDULER_STATE;

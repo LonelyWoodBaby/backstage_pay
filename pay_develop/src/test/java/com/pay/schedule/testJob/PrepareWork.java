@@ -1,13 +1,12 @@
 package com.pay.schedule.testJob;
 
-import com.pay.schedule.job.ToDoJob;
-import com.pay.schedule.service.ScheduleExecuteLogService;
+import com.pay.schedule.job.AbstractWorkJob;
+import com.pay.schedule.service.ScheduleExecutionRecordService;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-public class ScheduleLogJob extends ToDoJob {
+public class PrepareWork extends AbstractWorkJob{
     @Override
     public void executeJob(JobExecutionContext jobExecutionContext) {
         System.err.println("开始测试我的新job");
@@ -20,7 +19,7 @@ public class ScheduleLogJob extends ToDoJob {
     }
 
     @Autowired
-    public void setScheduleExecuteLogService(ScheduleExecuteLogService scheduleExecuteLogService) {
-        super.scheduleExecuteLogService = scheduleExecuteLogService;
+    public void setScheduleExecuteLogService(ScheduleExecutionRecordService scheduleExecutionRecordService) {
+        super.scheduleExecutionRecordService = scheduleExecutionRecordService;
     }
 }

@@ -4,12 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.pay.database.dao.BasicDao;
 import com.pay.database.dao.entity.PageInfo;
 import com.pay.database.mybatis.config.BaseMapper;
+import com.pay.database.mybatis.mapper.ScheduleExecutionRecordMapper;
 import com.pay.util.LoggerUtil;
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +22,15 @@ import java.util.Map;
 /**
  * @author Liyabin
  */
-@Service
-public class BasicDaoImpl<T> implements BasicDao<T> {
+public abstract class BasicDaoImpl<T> implements BasicDao<T> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+//    private Class<T> modelClass;
 
-    @Autowired
-    protected BaseMapper<T> baseMapper;
+    private BaseMapper<T> baseMapper;
 
+    public void setBaseMapper(BaseMapper<T> baseMapper) {
+        this.baseMapper = baseMapper;
+    }
 
     @Override
     public boolean insertNewEntity(Object o) {
@@ -121,4 +128,18 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
         }
         return pageInfo;
     }
+
+//    public T findBy(String property, Object value) throws TooManyResultsException {
+//        try {
+//            T model = modelClass.newInstance();
+//            Field field = modelClass.getDeclaredField(property);
+//            field.setAccessible(true);
+//            field.set(model, value);
+//            return baseMapper.selectOne(model);
+//        } catch (ReflectiveOperationException e) {
+//            //throw new ServiceException(e.getMessage(), e); 最好使用一个自定义异常
+//            throw new RuntimeException(e.getMessage(), e);
+//        }
+//    }
+
 }

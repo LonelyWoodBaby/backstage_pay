@@ -1,5 +1,7 @@
 package com.pay.beans.dictionary;
 
+import com.pay.beans.dictionary.base.BaseDict;
+import com.pay.beans.dictionary.base.DefaultDict;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,12 @@ import java.util.*;
 @Component
 @CacheDefaults(cacheName = "dictionary")
 public class DictionaryConfig {
-    Logger logger = LoggerFactory.getLogger(getClass());
+    private static Logger logger = LoggerFactory.getLogger(DictionaryConfig.class);
 
     public static Map<String,Map<String,BaseDict>> valueObjectDictionaryCache = new HashMap<>();
     public static Map<String,Map<String,BaseDict>> dataObjectDictionaryCache = new HashMap<>();
+
+    public static Map<String,Map<String,BaseDict>> allObjectDictionaryCache = new HashMap<>();
 
     @Autowired
     private DictionaryProperties dictionaryProperties;
@@ -80,6 +84,16 @@ public class DictionaryConfig {
     }
 
     /**
+     * 从全部对象字典中获取枚举类对象的映射值
+     * @param keyName 枚举类的名称，保存为全路径名称
+     * @param enumValue 枚举类的实际值
+     * @return 对应的映射值
+     */
+    public static String convertValueFromDictionary(String keyName,Enum enumValue){
+        return convertValueFromEnum(keyName,enumValue,allObjectDictionaryCache);
+    }
+
+    /**
      * 从视图对象字典中获取值在影射中的枚举对象
      * @param keyName 枚举类的名称，保存为全路径名称
      * @param enumValue 枚举类的实际值
@@ -99,9 +113,20 @@ public class DictionaryConfig {
         return transEnumFromDictionary(keyName,enumValue,dataObjectDictionaryCache);
     }
 
+    /**
+     * 全部对象字典中获取值在影射中的枚举对象
+     * @param keyName 枚举类的名称，保存为全路径名称
+     * @param enumValue 枚举类的实际值
+     * @return 对应的枚举对象
+     */
+    public static Enum transEnumFromDictionary(String keyName, String enumValue){
+        return transEnumFromDictionary(keyName,enumValue,allObjectDictionaryCache);
+    }
+
     private static Enum transEnumFromDictionary(String keyName,String enumValue, Map<String,Map<String,BaseDict>> dictionaryCache){
         Map<String,BaseDict> singleParamMap = dictionaryCache.get(keyName);
         if(singleParamMap == null){
+            logger.warn("没有获取到对应的字典集合。查询类名： " + keyName);
             return DefaultDict.noDictionary;
         }
         Optional<BaseDict> result = singleParamMap.values().stream().filter(baseDict -> baseDict.value().equals(enumValue)).findAny();
@@ -115,6 +140,7 @@ public class DictionaryConfig {
     private static String convertValueFromEnum(String keyName,Enum enumValue,Map<String,Map<String,BaseDict>> dictionaryCache){
         Map<String,BaseDict> singleParamMap = dictionaryCache.get(keyName);
         if(singleParamMap == null){
+            logger.warn("没有获取到对应的字典集合。查询类名： " + keyName);
             return DefaultDict.noDictionary.value();
         }
         return singleParamMap.getOrDefault(enumValue.name(), DefaultDict.noValue).value();
@@ -129,6 +155,7 @@ public class DictionaryConfig {
             if(BaseDict.class.isAssignableFrom(cls)){
                 Map<String,BaseDict> singleValueMap = initSingleEnumValue(cls);
                 valueObjectDictionaryCache.put(cls.getName(),singleValueMap);
+                getAllObjectDictionaryCache().put(cls.getName(),singleValueMap);
             }
         }
     }
@@ -177,6 +204,13 @@ public class DictionaryConfig {
         Optional<Enum> result = Arrays.stream(values).filter(v -> v.name().equals(enumName)).findAny();
         Assert.isTrue(result.isPresent(),"Bean字典转换时没有找到对应的字典项。转换值"+enumName+",转换对象:"+enumClass.getName() );
         return result.get();
+    }
+
+    private static Map<String,Map<String,BaseDict>> getAllObjectDictionaryCache(){
+        if(allObjectDictionaryCache == null){
+            allObjectDictionaryCache = new HashMap<>();
+        }
+        return allObjectDictionaryCache;
     }
 
 }

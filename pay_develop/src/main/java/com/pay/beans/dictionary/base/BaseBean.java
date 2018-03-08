@@ -1,5 +1,6 @@
-package com.pay.beans.dictionary;
+package com.pay.beans.dictionary.base;
 
+import com.pay.beans.dictionary.DictionaryConfig;
 import com.pay.beans.entity.ConvertNameBean;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public abstract class BaseBean {
         List<ConvertNameBean> regulationsList = new ArrayList<>();
         for(String key:otherMappingConfig.keySet()){
             regulationsList.add(new ConvertNameBean(key,
-                    (e)-> DictionaryConfig.convertValueFromValueDictionary(getMappingDictionaryConfig().get(key).getName(), (Enum) e)));
+                    (e)-> DictionaryConfig.convertValueFromDictionary(getMappingDictionaryConfig().get(key).getName(), (Enum) e)));
         }
         return regulationsList;
     }
@@ -30,7 +31,7 @@ public abstract class BaseBean {
         List<ConvertNameBean> regulationsList = new ArrayList<>();
         for(String key:otherMappingConfig.keySet()){
             regulationsList.add(new ConvertNameBean(key,
-                    (value)-> DictionaryConfig.transEnumFromValueDictionary(getMappingDictionaryConfig().get(key).getName(), (String) value)));
+                    (value)-> DictionaryConfig.transEnumFromDictionary(getMappingDictionaryConfig().get(key).getName(), (String) value)));
         }
         return regulationsList;
     }

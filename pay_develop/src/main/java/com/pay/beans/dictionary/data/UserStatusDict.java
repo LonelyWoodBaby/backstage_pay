@@ -1,6 +1,6 @@
 package com.pay.beans.dictionary.data;
 
-import com.pay.beans.dictionary.BaseDict;
+import com.pay.beans.dictionary.base.BaseDict;
 
 public enum UserStatusDict implements BaseDict {
     on("1"),

@@ -1,8 +1,6 @@
 package com.pay.beans;
 
-import com.pay.beans.dictionary.BaseBean;
-import com.pay.beans.dictionary.DefaultDict;
-import com.pay.beans.dictionary.DictionaryConfig;
+import com.pay.beans.dictionary.base.BaseBean;
 import com.pay.beans.entity.ConvertNameBean;
 import com.pay.beans.entity.ConvertTypeBean;
 import com.pay.beans.rules.FormatRule;
@@ -14,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -195,7 +194,7 @@ public class BeanUtils {
                         if(isConvertEnum && target.getClass().getDeclaredField(fieldName).getType().isEnum() && validateFunction.test(f)){
                             Enum enumName = (Enum) getRuleFunction.apply(f).transFunction( sourceGetMethod.invoke(source));
                             targetSetMethod.invoke(target, getEnumByValue(enumName.name(),target.getClass().getDeclaredField(fieldName).getType()));
-                        }else if(validateFunction.test(f)){
+                        }else if(validateFunction.test(f) && sourceGetMethod.invoke(source) != null){
                             targetSetMethod.invoke(target,getRuleFunction.apply(f).transFunction( sourceGetMethod.invoke(source)));
                         }
 

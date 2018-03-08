@@ -1,6 +1,6 @@
 package com.pay.beans.test;
 
-import com.pay.beans.dictionary.DefaultDict;
+import com.pay.beans.dictionary.base.DefaultDict;
 import com.pay.beans.dictionary.DictionaryConfig;
 import com.pay.beans.dictionary.DictionaryProperties;
 import org.junit.Assert;
