@@ -2,6 +2,10 @@ package com.pay.beans.dictionary.view;
 
 import com.pay.beans.dictionary.base.BaseDict;
 
+/**
+ * @author LiYabin
+ */
+
 public enum UserStatusDict implements BaseDict {
     on("1"),
     us("1"),

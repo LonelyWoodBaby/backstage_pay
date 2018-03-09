@@ -3,6 +3,9 @@ package com.pay.beans.dictionary;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author LiYabin
+ */
 @Component
 @ConfigurationProperties(prefix = "pay.dictionary.package")
 public class DictionaryProperties {

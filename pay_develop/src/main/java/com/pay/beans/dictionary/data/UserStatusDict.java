@@ -2,8 +2,18 @@ package com.pay.beans.dictionary.data;
 
 import com.pay.beans.dictionary.base.BaseDict;
 
+/**
+ * @author LiYabin
+ */
+
 public enum UserStatusDict implements BaseDict {
+    /**
+     * 开启
+     */
     on("1"),
+    /**
+     * 关闭
+     */
     off("200")
     ;
 

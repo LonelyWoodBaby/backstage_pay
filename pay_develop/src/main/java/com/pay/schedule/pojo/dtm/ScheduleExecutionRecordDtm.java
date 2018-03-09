@@ -2,15 +2,12 @@ package com.pay.schedule.pojo.dtm;
 
 import com.pay.beans.dictionary.base.BaseBean;
 import com.pay.beans.dictionary.data.ScheduleExecutionStateDict;
-import com.pay.beans.entity.ConvertNameBean;
-import com.pay.beans.entity.ConvertTypeBean;
+import com.pay.beans.rules.entity.ConvertNameBean;
 import com.pay.beans.rules.FormatRule;
 import com.pay.beans.rules.rulehelper.ConvertNameHelper;
-import com.pay.beans.rules.rulehelper.ConvertTypeHelper;
 import org.apache.ibatis.type.JdbcType;
 import tk.mybatis.mapper.annotation.ColumnType;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.*;

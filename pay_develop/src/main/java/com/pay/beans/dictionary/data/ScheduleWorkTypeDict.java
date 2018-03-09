@@ -2,6 +2,10 @@ package com.pay.beans.dictionary.data;
 
 import com.pay.beans.dictionary.base.extend.DataDict;
 
+/**
+ * @author LiYabin
+ */
+
 public enum ScheduleWorkTypeDict implements DataDict {
 
     /**

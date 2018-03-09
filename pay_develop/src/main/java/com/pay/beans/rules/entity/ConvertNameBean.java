@@ -1,4 +1,4 @@
-package com.pay.beans.entity;
+package com.pay.beans.rules.entity;
 
 
 import com.pay.beans.rules.FormatRule;

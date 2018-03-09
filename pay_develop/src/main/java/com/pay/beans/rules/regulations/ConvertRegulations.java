@@ -2,8 +2,8 @@ package com.pay.beans.rules.regulations;
 
 import com.pay.beans.dictionary.DictionaryConfig;
 import com.pay.beans.dictionary.view.UserStatusDict;
-import com.pay.beans.entity.ConvertNameBean;
-import com.pay.beans.entity.ConvertTypeBean;
+import com.pay.beans.rules.entity.ConvertNameBean;
+import com.pay.beans.rules.entity.ConvertTypeBean;
 import com.pay.beans.rules.FormatRule;
 
 import java.util.ArrayList;

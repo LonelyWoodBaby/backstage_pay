@@ -208,7 +208,7 @@ public class DictionaryConfig {
 
     private static Map<String,Map<String,BaseDict>> getAllObjectDictionaryCache(){
         if(allObjectDictionaryCache == null){
-            allObjectDictionaryCache = new HashMap<>();
+            allObjectDictionaryCache = new HashMap<>(1);
         }
         return allObjectDictionaryCache;
     }

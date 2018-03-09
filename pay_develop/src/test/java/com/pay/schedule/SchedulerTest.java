@@ -1,9 +1,5 @@
 package com.pay.schedule;
 
-import com.pay.beans.BeanUtils;
-import com.pay.beans.entity.ConvertTypeBean;
-import com.pay.beans.rules.FormatRule;
-import com.pay.schedule.pojo.dtm.ScheduleExecutionRecordDtm;
 import com.pay.schedule.pojo.model.ScheduleExecutionRecord;
 import com.pay.schedule.pojo.model.ScheduleWorkJob;
 import com.pay.schedule.pojo.model.dict.ScheduleExecutionState;
@@ -16,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

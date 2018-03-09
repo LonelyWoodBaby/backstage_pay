@@ -1,11 +1,7 @@
 package com.pay.schedule.service.impl;
 
 import com.pay.beans.BeanUtils;
-import com.pay.beans.entity.ConvertTypeBean;
-import com.pay.beans.rules.FormatRule;
-import com.pay.database.dao.BasicDao;
 import com.pay.database.dao.impl.BasicDaoImpl;
-import com.pay.database.mybatis.config.BaseMapper;
 import com.pay.database.mybatis.mapper.ScheduleExecutionRecordMapper;
 import com.pay.schedule.pojo.dtm.ScheduleExecutionRecordDtm;
 import com.pay.schedule.pojo.model.ScheduleExecutionRecord;
@@ -16,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 定时任务执行记录

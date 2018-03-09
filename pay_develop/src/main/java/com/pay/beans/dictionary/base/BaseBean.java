@@ -1,13 +1,16 @@
 package com.pay.beans.dictionary.base;
 
 import com.pay.beans.dictionary.DictionaryConfig;
-import com.pay.beans.entity.ConvertNameBean;
+import com.pay.beans.rules.entity.ConvertNameBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author LiYabin
+ */
 public abstract class BaseBean {
     private Map<String,Class> mappingDictionaryConfig;
     public List<ConvertNameBean> getEnumToValueDictionaryRegulations(){
@@ -43,7 +46,7 @@ public abstract class BaseBean {
 
     public Map<String, Class> getMappingDictionaryConfig() {
         if(mappingDictionaryConfig == null){
-            return new HashMap<>();
+            return new HashMap<>(1);
         }
         return mappingDictionaryConfig;
     }

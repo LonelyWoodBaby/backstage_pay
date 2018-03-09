@@ -1,8 +1,8 @@
 package com.pay.beans;
 
 import com.pay.beans.dictionary.base.BaseBean;
-import com.pay.beans.entity.ConvertNameBean;
-import com.pay.beans.entity.ConvertTypeBean;
+import com.pay.beans.rules.entity.ConvertNameBean;
+import com.pay.beans.rules.entity.ConvertTypeBean;
 import com.pay.beans.rules.FormatRule;
 import com.pay.beans.rules.regulations.ConvertRegulations;
 import com.pay.beans.rules.rulehelper.ConvertNameHelper;
