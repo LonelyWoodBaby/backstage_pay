@@ -5,6 +5,8 @@ import com.pay.beans.entity.ConvertNameBean;
 import com.pay.beans.entity.ConvertTypeBean;
 import com.pay.beans.rules.FormatRule;
 import com.pay.beans.rules.regulations.ConvertRegulations;
+import com.pay.beans.rules.rulehelper.ConvertNameHelper;
+import com.pay.beans.rules.rulehelper.ConvertTypeHelper;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
@@ -12,7 +14,6 @@ import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -51,12 +52,12 @@ public class BeanUtils {
         //enum -> String
         if(BaseBean.class.isAssignableFrom(target.getClass())
                 && ((BaseBean)target).getEnumToValueDictionaryRegulations().size() > 0){
-            copyBeanWithRuleByNameForEnum(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations(),false);
+            copyWithRuleOnlyByNameForEnum(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations(),false);
         }
         //String -> enum
         if(BaseBean.class.isAssignableFrom(source.getClass())
                 && ((BaseBean)source).getValueToEnumDictionaryRegulations().size() > 0){
-            copyBeanWithRuleByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(),true);
+            copyWithRuleOnlyByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(),true);
         }
     }
 
@@ -69,15 +70,41 @@ public class BeanUtils {
     public static void copyBeanBase(@NotNull Object source, Object target,Map<String,Class> mappingDictionaryConfig) {
         copyBeanOnly(source,target);
         //enum -> String
-        if(BaseBean.class.isAssignableFrom(target.getClass())
-                && ((BaseBean)target).getEnumToValueDictionaryRegulations().size() > 0){
-            copyBeanWithRuleByName(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations(mappingDictionaryConfig));
+        if(BaseBean.class.isAssignableFrom(target.getClass())){
+            copyWithRuleOnlyByNameForEnum(source,target,((BaseBean)target).getEnumToValueDictionaryRegulations(mappingDictionaryConfig),false);
         }
         //String -> enum
-        if(BaseBean.class.isAssignableFrom(source.getClass())
-                && ((BaseBean)source).getValueToEnumDictionaryRegulations().size() > 0){
-            copyBeanWithRuleByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(mappingDictionaryConfig),true);
+        if(BaseBean.class.isAssignableFrom(source.getClass())){
+            copyWithRuleOnlyByNameForEnum(source,target,((BaseBean)source).getValueToEnumDictionaryRegulations(mappingDictionaryConfig),true);
         }
+    }
+
+    /**
+     * 试验性质的扩展方法，对于已经做好扩展的bean（继承BaseBean，或者继承NameHelper和TypeHelper接口，可以在一个方法中全部完成。
+     * @param source
+     * @param target
+     */
+    public static void copyBeanBaseExtend(Object source, Object target){
+        copyBeanBase(source,target);
+
+        Optional<List<ConvertNameBean>> nameBeanList = Optional.empty();
+        Optional<List<ConvertTypeBean>> typeBeanList = Optional.empty();
+        //bo -> vo,do
+        if(ConvertTypeHelper.class.isAssignableFrom(target.getClass())){
+            typeBeanList = Optional.ofNullable(((ConvertTypeHelper)target).convertToValueByType());
+        }
+        if(ConvertNameHelper.class.isAssignableFrom(target.getClass())){
+            nameBeanList = Optional.ofNullable(((ConvertNameHelper)target).convertToValueByName());
+        }
+        //vo,do -> bo
+        if(ConvertTypeHelper.class.isAssignableFrom(source.getClass())){
+            typeBeanList = Optional.ofNullable(((ConvertTypeHelper)source).convertToFiledByType());
+        }
+        if(ConvertNameHelper.class.isAssignableFrom(source.getClass())){
+            nameBeanList = Optional.ofNullable(((ConvertNameHelper)source).convertToFiledByName());
+        }
+        typeBeanList.ifPresent((list) -> copyWithRuleOnlyByType(source,target,list));
+        nameBeanList.ifPresent((list) -> copyWithRuleOnlyByNameForEnum(source,target,list,false));
     }
 
     /**
@@ -111,11 +138,7 @@ public class BeanUtils {
      */
     public static void copyBeanWithRuleByType(Object source, Object target, List<ConvertTypeBean> convertRegulations){
         copyBeanBase(source,target);
-        Predicate<Field> noneMatchFunction = (Field f)-> Arrays.stream(target.getClass().getDeclaredFields())
-                .noneMatch(tf ->tf.getName().equals(f.getName()) && ConvertRegulations.hadClassType(convertRegulations,f.getType()));
-        Predicate<Field> validateFunction = f -> true;
-        Function<Field,FormatRule> getRuleFunction = f -> ConvertRegulations.getFormatRuleByType(convertRegulations,f.getType());
-        copyBeanWithRuleService(source,target,noneMatchFunction,validateFunction,getRuleFunction);
+        copyWithRuleOnlyByType(source,target,convertRegulations);
     }
 
     /**
@@ -151,10 +174,18 @@ public class BeanUtils {
      */
     public static void copyBeanWithRuleByName(Object source, Object target, List<ConvertNameBean> convertRegulations){
         copyBeanBase(source,target);
-        copyBeanWithRuleByNameForEnum(source,target,convertRegulations,false);
+        copyWithRuleOnlyByNameForEnum(source,target,convertRegulations,false);
     }
 
-    private static void copyBeanWithRuleByNameForEnum(Object source, Object target, List<ConvertNameBean> convertRegulations,boolean isConvertEnum){
+    private static void copyWithRuleOnlyByType(Object source, Object target, List<ConvertTypeBean> convertRegulations){
+        Predicate<Field> noneMatchFunction = (Field f)-> Arrays.stream(target.getClass().getDeclaredFields())
+                .noneMatch(tf ->tf.getName().equals(f.getName()) && ConvertRegulations.hadClassType(convertRegulations,f.getType()));
+        Predicate<Field> validateFunction = f -> true;
+        Function<Field,FormatRule> getRuleFunction = f -> ConvertRegulations.getFormatRuleByType(convertRegulations,f.getType());
+        copyBeanWithRuleService(source,target,noneMatchFunction,validateFunction,getRuleFunction);
+    }
+
+    private static void copyWithRuleOnlyByNameForEnum(Object source, Object target, List<ConvertNameBean> convertRegulations, boolean isConvertEnum){
         Predicate<Field> noneMatchFunction = (Field f)-> Arrays.stream(target.getClass().getDeclaredFields())
                 .noneMatch(tf ->tf.getName().equals(f.getName())
                         && ConvertRegulations.hadFieldName(convertRegulations,tf.getName()));

@@ -8,6 +8,7 @@ import com.pay.schedule.pojo.model.ScheduleExecutionRecord;
 import com.pay.schedule.pojo.model.ScheduleWorkJob;
 import com.pay.schedule.pojo.model.dict.ScheduleExecutionState;
 import com.pay.schedule.service.ScheduleExecutionRecordService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class SchedulerTest {
     @Autowired
     private QuartzSchedulerUtils quartzSchedulerUtils;
@@ -57,7 +59,7 @@ public class SchedulerTest {
         Thread.sleep(10000);
     }
 
-    @Test
+    @Ignore
     public void testToDoJob()throws Exception{
         String jobClassName3 = "com.pay.schedule.testJob.PrepareWork";
         String jobGroupName3 = "testGroup";
@@ -67,7 +69,7 @@ public class SchedulerTest {
         Thread.sleep(10000);
     }
 
-    @Ignore
+    @Test
     public void insertNewExecutionLog(){
         ScheduleExecutionRecord record = new ScheduleExecutionRecord();
         record.setRecordId(String.valueOf(new Date().getTime()));
@@ -90,5 +92,7 @@ public class SchedulerTest {
         record.setJobClassName("999999");
 
         scheduleExecutionRecordService.saveExecuteLogResult(record);
+
+
     }
 }

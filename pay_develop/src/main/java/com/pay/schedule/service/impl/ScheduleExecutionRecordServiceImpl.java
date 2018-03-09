@@ -44,9 +44,7 @@ public class ScheduleExecutionRecordServiceImpl extends BasicDaoImpl<ScheduleExe
                 "\n执行ID："+ record.getRecordId() +
                 "----------------------------------------\n");
         ScheduleExecutionRecordDtm recordDtm = new ScheduleExecutionRecordDtm();
-        List<ConvertTypeBean> convertList = new ArrayList<>();
-        convertList.add(new ConvertTypeBean(Date.class, FormatRule.formatDateRule("yyyy_MM_dd:HH_mm_ss:SSS")));
-        BeanUtils.copyBeanWithRuleByType(record,recordDtm,convertList);
+        BeanUtils.copyBeanBaseExtend(record,recordDtm);
         this.insertNewEntity(recordDtm);
     }
 
@@ -59,9 +57,7 @@ public class ScheduleExecutionRecordServiceImpl extends BasicDaoImpl<ScheduleExe
                 "\n运行时间："+ record.getExecutionTime() +
                 "\n----------------------------------------\n");
         ScheduleExecutionRecordDtm recordDtm = new ScheduleExecutionRecordDtm();
-        List<ConvertTypeBean> convertList = new ArrayList<>();
-        convertList.add(new ConvertTypeBean(Date.class, FormatRule.formatDateRule("yyyy_MM_dd:HH_mm_ss:SSS")));
-        BeanUtils.copyBeanWithRuleByType(record,recordDtm,convertList);
+        BeanUtils.copyBeanBaseExtend(record,recordDtm);
         this.update(recordDtm);
     }
 }

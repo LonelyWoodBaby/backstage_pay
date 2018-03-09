@@ -2,21 +2,25 @@ package com.pay.schedule.pojo.dtm;
 
 import com.pay.beans.dictionary.base.BaseBean;
 import com.pay.beans.dictionary.data.ScheduleExecutionStateDict;
+import com.pay.beans.entity.ConvertNameBean;
+import com.pay.beans.entity.ConvertTypeBean;
+import com.pay.beans.rules.FormatRule;
+import com.pay.beans.rules.rulehelper.ConvertNameHelper;
+import com.pay.beans.rules.rulehelper.ConvertTypeHelper;
 import org.apache.ibatis.type.JdbcType;
 import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author LiYabin
  * 定时任务执行记录
  */
 @Table(name="Schedule_Execution_Record")
-public class ScheduleExecutionRecordDtm extends BaseBean{
+public class ScheduleExecutionRecordDtm extends BaseBean implements ConvertNameHelper{
     @Id
     private String recordId;
     private String jobClassName;
@@ -98,5 +102,18 @@ public class ScheduleExecutionRecordDtm extends BaseBean{
         Map<String,Class> map = new HashMap<>();
         map.put("executionState",ScheduleExecutionStateDict.class);
         return map;
+    }
+
+    @Override
+    public List<ConvertNameBean> convertToValueByName() {
+        List<ConvertNameBean> convertList = new ArrayList<>();
+        convertList.add(new ConvertNameBean("occurTime", FormatRule.formatDateRule("yyyy_MM_dd:HH_mm_ss:SSS")));
+        convertList.add(new ConvertNameBean("endTime", FormatRule.formatDateRule("yyyy_MM_dd:HH_mm_ss:SSS")));
+        return convertList;
+    }
+
+    @Override
+    public List<ConvertNameBean> convertToFiledByName() {
+        return null;
     }
 }
