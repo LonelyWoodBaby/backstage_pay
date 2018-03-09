@@ -37,7 +37,7 @@ public class ScheduleExecutionRecordServiceImpl extends BasicDaoImpl<ScheduleExe
                 "\n执行ID："+ record.getRecordId() +
                 "----------------------------------------\n");
         ScheduleExecutionRecordDtm recordDtm = new ScheduleExecutionRecordDtm();
-        BeanUtils.copyBeanBaseExtend(record,recordDtm);
+        BeanUtils.copyBeanExtend(record,recordDtm);
         this.insertNewEntity(recordDtm);
     }
 
@@ -50,7 +50,7 @@ public class ScheduleExecutionRecordServiceImpl extends BasicDaoImpl<ScheduleExe
                 "\n运行时间："+ record.getExecutionTime() +
                 "\n----------------------------------------\n");
         ScheduleExecutionRecordDtm recordDtm = new ScheduleExecutionRecordDtm();
-        BeanUtils.copyBeanBaseExtend(record,recordDtm);
+        BeanUtils.copyBeanExtend(record,recordDtm);
         this.update(recordDtm);
     }
 }

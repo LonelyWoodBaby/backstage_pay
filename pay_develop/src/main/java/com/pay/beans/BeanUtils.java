@@ -84,7 +84,7 @@ public class BeanUtils {
      * @param source
      * @param target
      */
-    public static void copyBeanBaseExtend(Object source, Object target){
+    public static void copyBeanExtend(Object source, Object target){
         copyBeanBase(source,target);
 
         Optional<List<ConvertNameBean>> nameBeanList = Optional.empty();
