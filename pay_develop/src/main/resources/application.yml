@@ -26,6 +26,28 @@ spring:
     jcache:
       config: classpath:ehcache.xml
 
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    database: 0
+#    jedis:
+#      pool:
+#        max-active: 8
+#        max-wait: -1ms
+#        max-idle: 8
+#        min-idle: 0
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+
+    timeout: 0ms
+
+
+
 # 数据库配置
 mybatis:
   mapper-locations: classpath:pojo/dtm/mapping/*.xml

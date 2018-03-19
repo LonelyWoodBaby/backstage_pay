@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/pay_build/pay_build.iml" filepath="$PROJECT_DIR$/pay_build/pay_build.iml" />
       <module fileurl="file://$PROJECT_DIR$/pay_core/pay_core.iml" filepath="$PROJECT_DIR$/pay_core/pay_core.iml" />
       <module fileurl="file://$PROJECT_DIR$/pay_develop/pay_develop.iml" filepath="$PROJECT_DIR$/pay_develop/pay_develop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pay_study/pay_study.iml" filepath="$PROJECT_DIR$/pay_study/pay_study.iml" />
     </modules>
   </component>
 </project>
