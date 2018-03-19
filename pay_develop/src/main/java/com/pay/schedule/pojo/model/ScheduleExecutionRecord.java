@@ -52,19 +52,19 @@ public class ScheduleExecutionRecord {
     }
 
     public Date getOccurTime() {
-        return occurTime;
+        return (Date)occurTime.clone();
     }
 
     public void setOccurTime(Date occurTime) {
-        this.occurTime = occurTime;
+        this.occurTime = (Date)occurTime.clone();
     }
 
     public Date getEndTime() {
-        return endTime;
+        return (Date)endTime.clone();
     }
 
     public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+        this.endTime = (Date)endTime.clone();
     }
 
     public String getExceptionMsg() {

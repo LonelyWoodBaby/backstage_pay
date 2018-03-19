@@ -85,7 +85,7 @@ public class UserMapperTest {
         for(int i = 0; i<5; i++){
             List<User> resultList =  userService.findAllUserFromCache();
             if(resultList == null) System.out.println("没有结果");
-            System.out.println(resultList.size());
+            else{System.out.println(resultList.size());}
         }
 //        resultList.stream().forEach(user -> System.out.println(user.getUserId()));
     }

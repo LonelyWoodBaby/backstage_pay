@@ -78,10 +78,10 @@ public class UserBean {
     }
 
     public Date getBirthday() {
-        return birthday;
+        return (Date)birthday.clone();
     }
 
     public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+        this.birthday = (Date)birthday.clone();
     }
 }
