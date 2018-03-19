@@ -9,6 +9,7 @@ BeanUtils.ready(o1,o2)//初始化配置
     .convertDict(EnumMap) //对字典项进行转换，可转换一个或多个
     .formatValue(FormatRuleMap) //对映射中的字段进行转换
 
+
 终结方法
     .end(); 结束转换，o1 -> o2
     .return();将转换后的o2返回
