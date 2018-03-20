@@ -39,13 +39,6 @@ public class ConvertRegulations {
         return beanList;
     }
 
-    private static List<ConvertNameBean> getEnumValueRegulation()  {
-        List<ConvertNameBean> beanList = new ArrayList<>();
-        beanList.add(new ConvertNameBean("userStatusDict",
-                (e)-> DictionaryUtils.convertValueFromValueDictionary(UserStatusDict.class.getName(), (Enum) e)));
-        return beanList;
-    }
-
     /************以下为工具类的API方法集合*************/
 
     public static boolean hadClassType(List<ConvertTypeBean> typeBeanList,Class valClass){
