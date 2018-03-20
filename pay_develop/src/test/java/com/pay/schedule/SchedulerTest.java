@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -65,6 +66,10 @@ public class SchedulerTest {
 
     @Test
     public void insertNewExecutionLog(){
+        System.out.println("开始查询1:");
+        showRecordList(scheduleExecutionRecordService.getAllExecutionList(),true);
+
+        System.out.println("执行插入操作");
         ScheduleExecutionRecord record = new ScheduleExecutionRecord();
         record.setRecordId(String.valueOf(new Date().getTime()));
         record.setExecutionTime(1000L);
@@ -82,11 +87,31 @@ public class SchedulerTest {
 
         scheduleExecutionRecordService.insertNewExecuteLog(record);
 
+        System.out.println("开始查询2:");
+        showRecordList(scheduleExecutionRecordService.getAllExecutionList(),false);
+        System.out.println("开始查询3:");
+        showRecordList(scheduleExecutionRecordService.getAllExecutionList(),false);
+
         record.setJobGroupName("888888");
         record.setJobClassName("999999");
-
+        System.out.println("执行修改操作");
         scheduleExecutionRecordService.saveExecuteLogResult(record);
+        System.out.println("开始查询4:");
+        showRecordList(scheduleExecutionRecordService.getAllExecutionList(),true);
+        System.out.println("开始查询5");
+        showRecordList(scheduleExecutionRecordService.getAllExecutionList(),false);
 
 
+    }
+
+    private void showRecordList(List<ScheduleExecutionRecord> recordList,boolean showAll){
+        System.out.println("返回的结果集长度为："+recordList.size());
+        if(showAll){
+            System.out.println("-------------------------------");
+            recordList.stream().forEach(r ->{
+                System.out.println(r.getJobGroupName());
+            });
+            System.out.println("-------------------------------");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.pay.beans.rules.regulations;
 
 import com.pay.beans.dictionary.DictionaryConfig;
+import com.pay.beans.dictionary.DictionaryUtils;
 import com.pay.beans.dictionary.view.UserStatusDict;
 import com.pay.beans.rules.entity.ConvertNameBean;
 import com.pay.beans.rules.entity.ConvertTypeBean;
@@ -41,7 +42,7 @@ public class ConvertRegulations {
     private static List<ConvertNameBean> getEnumValueRegulation()  {
         List<ConvertNameBean> beanList = new ArrayList<>();
         beanList.add(new ConvertNameBean("userStatusDict",
-                (e)-> DictionaryConfig.convertValueFromValueDictionary(UserStatusDict.class.getName(), (Enum) e)));
+                (e)-> DictionaryUtils.convertValueFromValueDictionary(UserStatusDict.class.getName(), (Enum) e)));
         return beanList;
     }
 

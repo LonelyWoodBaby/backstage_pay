@@ -1,5 +1,6 @@
 package com.pay.data.redis;
 
+import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +11,9 @@ import java.lang.reflect.Method;
 
 @Configuration
 @EnableCaching
-public class JedisRedisConfig {
+public class JedisRedisConfig extends CachingConfigurerSupport {
 
+    @Override
     @Bean
     public KeyGenerator keyGenerator(){
         return new KeyGenerator() {

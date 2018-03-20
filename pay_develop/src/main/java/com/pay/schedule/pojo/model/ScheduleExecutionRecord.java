@@ -3,13 +3,14 @@ package com.pay.schedule.pojo.model;
 import com.pay.schedule.pojo.model.dict.ScheduleExecutionState;
 import org.quartz.JobDetail;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author LiYabin
  * 定时任务执行记录
  */
-public class ScheduleExecutionRecord {
+public class ScheduleExecutionRecord implements Serializable{
     private String recordId;
     private String jobClassName;
     private String jobGroupName;

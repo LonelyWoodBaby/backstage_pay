@@ -1,5 +1,6 @@
 package com.pay.beans.test;
 
+import com.pay.beans.dictionary.DictionaryUtils;
 import com.pay.beans.dictionary.base.DefaultDict;
 import com.pay.beans.dictionary.DictionaryConfig;
 import com.pay.beans.dictionary.DictionaryProperties;
@@ -19,9 +20,6 @@ public class TestBeanUtilsForDic {
     @Autowired
     private DictionaryProperties dictionaryProperties;
 
-    @Autowired
-    private DictionaryConfig dictionaryConfig;
-
     @Ignore
     public void testReadPropertiesValue(){
         System.out.println(dictionaryProperties.getDataPackageName());
@@ -30,21 +28,21 @@ public class TestBeanUtilsForDic {
     @Ignore
     public void testInitValueObjectCache() {
 
-        String value = DictionaryConfig.convertValueFromValueDictionary(com.pay.beans.dictionary.view.UserStatusDict.class.getName(),UserStatusDict.noStatus);
+        String value = DictionaryUtils.convertValueFromValueDictionary(com.pay.beans.dictionary.view.UserStatusDict.class.getName(),UserStatusDict.noStatus);
         Assert.assertEquals(value,"");
     }
 
     @Ignore
     public void testGetEnumFromCache(){
         String value = "200";
-        com.pay.beans.dictionary.view.UserStatusDict userStatusDict = (com.pay.beans.dictionary.view.UserStatusDict) DictionaryConfig.transEnumFromValueDictionary(com.pay.beans.dictionary.view.UserStatusDict.class.getName(),value);
+        com.pay.beans.dictionary.view.UserStatusDict userStatusDict = (com.pay.beans.dictionary.view.UserStatusDict) DictionaryUtils.transEnumFromValueDictionary(com.pay.beans.dictionary.view.UserStatusDict.class.getName(),value);
         System.out.println(userStatusDict.name());
     }
 
     @Test
     public void testGetEnumByName() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        String name = "ffff";
-        Enum result = DictionaryConfig.getEnumByValue(name,UserStatusDict.class);
+        String name = "off";
+        Enum result = DictionaryUtils.getEnumByValue(name,UserStatusDict.class);
         if(result != DefaultDict.noValue){
             UserStatusDict userStatusDict = (UserStatusDict)result;
             System.out.println(userStatusDict.name());
