@@ -46,7 +46,13 @@ spring:
 
     timeout: 0ms
 
-
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+    publisher-confirms: true
+    virtual-host: /
+    port: 5672
 
 # 数据库配置
 mybatis:

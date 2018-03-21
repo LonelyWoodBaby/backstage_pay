@@ -53,7 +53,7 @@ public class ScheduleExecutionRecord implements Serializable{
     }
 
     public Date getOccurTime() {
-        return (Date)occurTime.clone();
+        return occurTime == null ? null : (Date)occurTime.clone();
     }
 
     public void setOccurTime(Date occurTime) {
@@ -61,7 +61,7 @@ public class ScheduleExecutionRecord implements Serializable{
     }
 
     public Date getEndTime() {
-        return (Date)endTime.clone();
+        return endTime == null ? null : (Date)endTime.clone();
     }
 
     public void setEndTime(Date endTime) {
