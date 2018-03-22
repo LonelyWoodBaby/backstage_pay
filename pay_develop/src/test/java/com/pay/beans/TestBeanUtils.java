@@ -1,5 +1,6 @@
 package com.pay.beans;
 
+import com.pay.beans.beans2.CopyTemplate;
 import com.pay.beans.rules.entity.ConvertNameBean;
 import com.pay.beans.rules.entity.ConvertTypeBean;
 import com.pay.beans.rules.FormatRule;
@@ -90,6 +91,21 @@ public class TestBeanUtils {
             BeanUtils.copyBeanBase(source,target);
         }
         sayUserBean(target);
+    }
+
+    @Test
+    public void testBeanUtils2(){
+        UserBean source = createUserBean();
+        UserDtm target= new UserDtm();
+        target = BeanUtils2.prepare(source,target)
+                .copyBeanBase()
+                .setDictionaryConfig(target.getMappingDictionaryConfig())
+                .covertDictEnumToString()
+                .setConvertTypeBean(ConvertRegulations.MODEL_TO_DATA_MODEL_REGULATION)
+                .convertByTypeBean()
+                .getTargetObject();
+
+        sayUserDtm(target);
     }
 
     private UserBean createUserBean(){
