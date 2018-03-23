@@ -6,6 +6,9 @@ import com.pay.beans.dictionary.data.ScheduleWorkTypeDict;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author LiYabin
+ */
 public class ScheduleWorkJobDtm extends BaseBean{
     private String jobId;
     private String jobClassName;

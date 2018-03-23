@@ -45,10 +45,20 @@ public interface BasicDao<T> {
      */
     boolean delete(T... t);
 
+    /**
+     * 将列表中包含的实例对象全部删除
+     * @param entityList
+     * @return
+     */
     boolean deleteAll(List<T> entityList);
 
     //修改类
 
+    /**
+     * 修改实例对象
+     * @param t
+     * @return
+     */
     boolean update(T t);
 
     //查询类
@@ -67,11 +77,37 @@ public interface BasicDao<T> {
 ////    List<T> findAll(Map selectMap);
     List<T> findAll(T t);
 
+    /**
+     * 按照对象实例作为条件进行查询
+     * @param condition
+     * @return
+     */
     List<T> findAllByCondition(Object condition);
             //SelectByConditionMapper
 
+    /**
+     * 查询出全部的数目，按照实例作为条件查询
+     * @param t
+     * @return 返回查询结果集的数量
+     */
     int countAll(T t);
+
+    /**
+     * 分页查询
+     * @param t
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     PageInfo<T> getPageInfo(T t,int pageNum,int pageSize);
+
+    /**
+     * 加入条件的分页查询
+     * @param condition
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     PageInfo<T> getPageInfoByCondition(Object condition,int pageNum,int pageSize);
 
 }

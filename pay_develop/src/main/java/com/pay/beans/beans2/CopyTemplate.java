@@ -16,6 +16,8 @@ import java.util.function.Predicate;
 
 /**
  * copyBean的临时储放对象
+ * @author liyabin
+ * 实现了类型自动推断
  */
 public class CopyTemplate<T,R> {
     private T sourceObject;

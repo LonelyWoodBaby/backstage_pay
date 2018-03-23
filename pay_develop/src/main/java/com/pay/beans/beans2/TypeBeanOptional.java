@@ -5,6 +5,10 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+/**
+ * @author LiYabin
+ * 实现对ConvertTypeBean的业务处理
+ */
 public class TypeBeanOptional<T,R> {
     private CopyTemplate template;
     private List<ConvertTypeBean> typeBeanList;

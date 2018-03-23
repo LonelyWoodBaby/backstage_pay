@@ -4,6 +4,10 @@ import org.springframework.util.Assert;
 
 import java.util.Map;
 
+/**
+ * @author LiYabin
+ * 主要包括对字典项的处理
+ */
 public class CopyDictOptional<T,R> {
     private CopyTemplate template;
     private Map<String,Class> mappingDictionaryConfig;

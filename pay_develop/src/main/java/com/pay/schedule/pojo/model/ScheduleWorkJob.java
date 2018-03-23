@@ -2,6 +2,10 @@ package com.pay.schedule.pojo.model;
 
 import com.pay.schedule.pojo.model.dict.ScheduleWorkType;
 
+/**
+ * @author LiYabin
+ * 执行定时任务的内容详情
+ */
 public class ScheduleWorkJob {
     private String jobId;
     private String jobClassName;

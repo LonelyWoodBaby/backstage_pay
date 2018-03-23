@@ -5,6 +5,10 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+/**
+ * @author LiYabin
+ * 负责对ConvertNameBean的操作管理
+ */
 public class NameBeanOptional<T,R> {
     private CopyTemplate template;
     private List<ConvertNameBean> nameBeanList;
