@@ -24,4 +24,12 @@ public interface ScheduleExecutionRecordService extends BasicDao<ScheduleExecuti
      * @return
      */
     List<ScheduleExecutionRecord> getAllExecutionList();
+
+    /**
+     * 分页查询执行记录日志
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    List<ScheduleExecutionRecord> getExecutionListByPage(int pageNum,int pageSize);
 }

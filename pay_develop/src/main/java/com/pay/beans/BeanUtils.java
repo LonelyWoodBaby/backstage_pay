@@ -1,9 +1,9 @@
 package com.pay.beans;
 
 import com.pay.beans.dictionary.base.BaseBean;
+import com.pay.beans.rules.FormatRule;
 import com.pay.beans.rules.entity.ConvertNameBean;
 import com.pay.beans.rules.entity.ConvertTypeBean;
-import com.pay.beans.rules.FormatRule;
 import com.pay.beans.rules.regulations.ConvertRegulations;
 import com.pay.beans.rules.rulehelper.ConvertNameHelper;
 import com.pay.beans.rules.rulehelper.ConvertTypeHelper;
@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * @author 亚斌
  * 主要用于各层之间的Bean对象的转换，并提供转换时对一些值的自动转换
@@ -28,7 +30,8 @@ import java.util.function.Predicate;
  * 1.要求源对象与目标对象之间的变量名称保持一致（区分大小写）
  * 2.如果存在相同名称但不相同的类型，需要添加转换规则。
  */
-public class BeanUtils {
+
+public class BeanUtils{
 
     /**
      * 单纯的对象复制，采用spring提供的复制方法，可以有效复制变量值以及对应的列表数据。
@@ -105,6 +108,20 @@ public class BeanUtils {
         }
         typeBeanList.ifPresent((list) -> copyWithRuleOnlyByType(source,target,list));
         nameBeanList.ifPresent((list) -> copyWithRuleOnlyByNameForEnum(source,target,list,false));
+    }
+
+    public static <T,R> List<R> copyBeanExtendForList(List<T> sourceList,Class<R> clazz){
+        List<R> targetList = sourceList.stream().map(t -> {
+            try {
+                R r = clazz.newInstance();
+                BeanUtils.copyBeanExtend(t,r);
+                return r;
+            } catch (Exception e) {
+                //TODO 此处需要打印日志
+                throw new RuntimeException(e);
+            }
+        }).collect(toList());
+        return targetList;
     }
 
     /**

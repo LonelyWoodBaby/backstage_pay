@@ -114,4 +114,10 @@ public class SchedulerTest {
             System.out.println("-------------------------------");
         }
     }
+
+    @Test
+    public void testFindAllExecutionLogByPage(){
+        List<ScheduleExecutionRecord> recordList = scheduleExecutionRecordService.getExecutionListByPage(1,5);
+        recordList.stream().forEach(r -> System.out.printf(r.getRecordId()));
+    }
 }

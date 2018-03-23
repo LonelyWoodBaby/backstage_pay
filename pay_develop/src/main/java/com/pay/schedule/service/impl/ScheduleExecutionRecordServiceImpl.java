@@ -1,6 +1,7 @@
 package com.pay.schedule.service.impl;
 
 import com.pay.beans.BeanUtils;
+import com.pay.database.dao.entity.PageInfo;
 import com.pay.database.dao.impl.BasicDaoImpl;
 import com.pay.database.mybatis.mapper.ScheduleExecutionRecordMapper;
 import com.pay.schedule.pojo.dtm.ScheduleExecutionRecordDtm;
@@ -67,7 +68,7 @@ public class ScheduleExecutionRecordServiceImpl extends BasicDaoImpl<ScheduleExe
     @Cacheable("getAllExecutionList")
     @Override
     public List<ScheduleExecutionRecord> getAllExecutionList(){
-        System.out.println("进入数据库方法进行查询");
+        logger.info("进入数据库方法进行查询");
         List<ScheduleExecutionRecordDtm> recordDtmList =  scheduleExecutionRecordMapper.selectAll();
         List<ScheduleExecutionRecord> recordList = recordDtmList.stream().map(dtm->{
             ScheduleExecutionRecord record = new ScheduleExecutionRecord();
@@ -77,4 +78,13 @@ public class ScheduleExecutionRecordServiceImpl extends BasicDaoImpl<ScheduleExe
         System.out.println("查询结果长度是：" + recordList.size());
         return recordList;
     }
+
+    @Override
+    public List<ScheduleExecutionRecord> getExecutionListByPage(int pageNum, int pageSize){
+        PageInfo<ScheduleExecutionRecordDtm> pageInfo = this.getPageInfo(new ScheduleExecutionRecordDtm(),pageNum,pageSize);
+        List<ScheduleExecutionRecordDtm> recordDtmList = pageInfo.getResultList();
+        List<ScheduleExecutionRecord> recordList = BeanUtils.copyBeanExtendForList(recordDtmList,ScheduleExecutionRecord.class);
+        return recordList;
+    }
+
 }
